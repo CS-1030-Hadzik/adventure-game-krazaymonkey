@@ -72,7 +72,7 @@ while True:
         if player.is_item_in_inventory("a lantern"):
             print(f"{player.name}, you enter the dark cave.")
         else:
-            print("It's too dark to see in the cave.")
+            print("It's too dark to see in the cave.\n")
     elif decision == "3":
     # TODO: In path 2, after picking up the map:
     #       - Set player.has_map = True
