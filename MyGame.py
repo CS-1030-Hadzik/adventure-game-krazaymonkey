@@ -1,7 +1,7 @@
 """
 Adventure Game
 Author: Tiffany Walther
-Version: 3.5
+Version: 4.0
 Description:
 This is a text-based adventure game where the player makes choices
 to navigate through a mysterious forest.
