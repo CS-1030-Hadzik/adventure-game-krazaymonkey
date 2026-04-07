@@ -53,13 +53,17 @@ def explore_cave(player):
     # TODO: In the cave choice:
     # - If player.has_lantern is True: allow entry and add "treasure" to inventory
     # - Else: display a message that it’s too dark
-    if player.is_item_in_inventory("a lantern"):
+    if player.is_item_in_inventory("A lantern"):
         print(f"{player.name}, you enter the dark cave.")
         print("Lantern light bounces off the wet walls around you.")
         print("You see a gold reflection around the next corner.")
         player.add_to_inventory("A treasure chest")
     else:
         print("It's too dark to see in the cave.\n")
+        print("The looming darkness pushes you back from the cave.")
+        player.health -= 10
+        print(f"Your health is now {player.health}")
+
 
 # TODO: Create a function called explore_mountain_pass(player)
 #       - Print area description
@@ -70,24 +74,45 @@ def explore_mountain_pass(player):
     print(f"{player.name}, you step onto the right path and venture into the mountains. ")
     print("The wind howls as you climb the steep, rocky, slope.")
     print("You see something flapping in the wind, caught on a small tree.")
-    player.add_to_inventory("a map")
+    player.add_to_inventory("A map")
 
 # TODO: Create a function called explore_hidden_valley(player)
 #       - If player.has_map: allow entry and add "rare herbs"
 #       - Else: warn that player can't find the valley
 def explore_hidden_valley(player):
-    # TODO: Add a new menu option for "Search for a hidden valley"
     # TODO: In the valley choice:
     #       - If player.has_map is True: allow entry and add "rare herbs" to inventory
     #       - Else: display a message that you can’t find the valley
-    if (player.is_item_in_inventory("a map") and player.is_item_in_inventory("a treasure chest")):
+    if (player.is_item_in_inventory("A map") and player.is_item_in_inventory("A treasure chest")):
         print(f"{player.name} you enter the hidden valley.")
-        player.add_to_inventory("rare herbs")
+        print("Rolling hills covered in wildflows sway in a gentle breeze.")
+        print("A distinct patch of green catches your eye.")
+        player.add_to_inventory("Rare herbs")
     else:
-        print("You're missing the required items to find the hidden valley.\n")
+        print("You're missing the required items to find the hidden valley.")
+        print("Hungry and lost you return to the main path.")
+        player.health -= 10
+        print(f"Your health is now {player.health}")
 
+# TODO: Create a function stay_still(player)
+#       - Subtract 10 health when the player stays still
 def stay_still(player):
-    pass
+    player.health -= 10
+    print(f"Your health is now {player.health}")
+
+def check_win(player):
+    if player.is_item_in_inventory("Rare herbs"):
+        print(f"Congratulations, {player.name}, you have won the game!")
+        return True
+    else:
+        return False
+    
+def check_lose(player):
+    if player.health <= 0:
+        print(f"{player.name}, you have succumbed to hunger and died.")
+        return True
+    else:
+        return False
 
 welcome_player()
 
@@ -99,10 +124,6 @@ player.get_name()
 print(f"Welcome {player.name}! Your journey begins now.")
 
 describe_start_area()
-
-#while loop -> when we don't know the number of times to loop
-#for loop -> when we know the number of times to loop
-#do while (not in python) -> will execute at least once. condition is at the bottom
 
 while True:
     # Ask the player for their first decision
@@ -124,6 +145,8 @@ while True:
 
     elif decision == "5": #wrong input
         print(f"{player.name}, you hesitate and stay where you are. ")
+        print("The path looms ahead with an overwhelming presence.")
+        stay_still(player)
 
     # added in for fun
     elif decision == "q": #quit
@@ -134,4 +157,10 @@ while True:
     elif decision == "i":
         print(player.inventory)
     else:
-        print("Confused, you stand still, unsure of what to do.\n")
+        print("Confused, you stand still, unsure of what to do.\n Please chose from the above options.")
+
+    if check_win(player):
+        break
+
+    if check_lose(player):
+        break
