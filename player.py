@@ -30,13 +30,12 @@ class Player():
     #Create an inventory system that the player can view
     def add_to_inventory(self, item):
         self.inventory.append(item)
-        print(f"You picked up {item}. It has been added to your inventory. \n")
+        print(f"{item} has been added to your inventory. \n")
 
     def is_item_in_inventory(self, item):
         #item = lantern
         #look at inventory and check for a lantern
-        for item in self.inventory:
-            if item in self.inventory:
-                return True
-            return False
+        if item in self.inventory:
+            return True
+        return False
 
