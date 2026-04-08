@@ -1,7 +1,7 @@
 """
 Adventure Game
 Author: Tiffany Walther
-Version: 4.0
+Version: 4.5
 Description:
 This is a text-based adventure game where the player makes choices
 to navigate through a mysterious forest.
@@ -39,77 +39,77 @@ def describe_start_area():
 #       - Print area description
 #       - Add "lantern" to inventory if not already collected
 def explore_dark_woods(player):
-        # TODO: In path 1, after picking up the lantern:
-        # - Set player.has_lantern = True
         print(f"{player.name}, you step onto the left path and venture into the dark woods. ")
         print("The woods seem to whisper as you pass.")
         print("You see something glimmering near the base of a tree.")
         player.add_to_inventory("A lantern")
+        print("You return to the main path to choose again.")
 
 # TODO: Create a function called explore_cave(player)
 #       - If player.has_lantern: allow entry and add "treasure"
 #       - Else: warn that it's too dark
 def explore_cave(player):
-    # TODO: In the cave choice:
-    # - If player.has_lantern is True: allow entry and add "treasure" to inventory
-    # - Else: display a message that it’s too dark
     if player.is_item_in_inventory("A lantern"):
         print(f"{player.name}, you enter the dark cave.")
         print("Lantern light bounces off the wet walls around you.")
         print("You see a gold reflection around the next corner.")
         player.add_to_inventory("A treasure chest")
+        print("You return to the main path to choose again.")
     else:
         print("It's too dark to see in the cave.\n")
-        print("The looming darkness pushes you back from the cave.")
+        print("The looming darkness pushes you back to the main path.")
         player.health -= 10
-        print(f"Your health is now {player.health}")
+        print(f"Your health is now {player.health}\n")
 
 
 # TODO: Create a function called explore_mountain_pass(player)
 #       - Print area description
 #       - Add "map" to inventory if not already collected
 def explore_mountain_pass(player):
-    # TODO: In path 2, after picking up the map:
-    #       - Set player.has_map = True
     print(f"{player.name}, you step onto the right path and venture into the mountains. ")
-    print("The wind howls as you climb the steep, rocky, slope.")
+    print("The wind howls as you climb the steep, rocky slope.")
     print("You see something flapping in the wind, caught on a small tree.")
     player.add_to_inventory("A map")
+    print("You return to the main path to choose again.")
 
 # TODO: Create a function called explore_hidden_valley(player)
 #       - If player.has_map: allow entry and add "rare herbs"
 #       - Else: warn that player can't find the valley
 def explore_hidden_valley(player):
-    # TODO: In the valley choice:
-    #       - If player.has_map is True: allow entry and add "rare herbs" to inventory
-    #       - Else: display a message that you can’t find the valley
     if (player.is_item_in_inventory("A map") and player.is_item_in_inventory("A treasure chest")):
-        print(f"{player.name} you enter the hidden valley.")
-        print("Rolling hills covered in wildflows sway in a gentle breeze.")
+        print(f"{player.name} you find your way to the hidden valley.")
+        print("Rolling hills covered in wildflowers sway in a gentle breeze.")
         print("A distinct patch of green catches your eye.")
         player.add_to_inventory("Rare herbs")
     else:
         print("You're missing the required items to find the hidden valley.")
         print("Hungry and lost you return to the main path.")
         player.health -= 10
-        print(f"Your health is now {player.health}")
+        print(f"Your health is now {player.health}\n")
 
 # TODO: Create a function stay_still(player)
 #       - Subtract 10 health when the player stays still
 def stay_still(player):
     player.health -= 10
-    print(f"Your health is now {player.health}")
+    print("The darkness of the forest pushes on your mind.")
+    print(f"Your health is now {player.health}\n")
 
+# TODO: Create win conditions
+# requires rare herbs and treasure. Tresure is required to get rare herbs
 def check_win(player):
     if player.is_item_in_inventory("Rare herbs"):
         print(f"Congratulations, {player.name}, you have won the game!")
+        print("The light is now shining brightly through the trees, ligting the path home.")
         return True
     else:
         return False
-    
+
+# TODO: create lose conditions
+# player health = 0, death
 def check_lose(player):
     if player.health <= 0:
         print(f"{player.name}, you have succumbed to hunger and died.")
+        print("The trees will accept your remains into their forest.")
         return True
     else:
         return False
@@ -127,7 +127,6 @@ describe_start_area()
 
 while True:
     # Ask the player for their first decision
-    # decision = input("Do you wish to take the path? (yes, no, or run): ").lower()
     decision = input("What will you do? (1, 2, 3, 4, 5, q, i): ").lower()
 
     # Respond based on the player's decision
@@ -143,20 +142,20 @@ while True:
     elif decision == "4": # hidden valley
         explore_hidden_valley(player)
 
-    elif decision == "5": #wrong input
+    elif decision == "5": 
         print(f"{player.name}, you hesitate and stay where you are. ")
         print("The path looms ahead with an overwhelming presence.")
         stay_still(player)
 
     # added in for fun
     elif decision == "q": #quit
-        print("You turn and run from the forest and end your adventure.\n Thanks for playing!")
+        print("You turn and run from the forest ending your adventure.\n Thanks for playing!")
         break
 
     #look at inventory
     elif decision == "i":
         print(player.inventory)
-    else:
+    else: #wrong input
         print("Confused, you stand still, unsure of what to do.\n Please chose from the above options.")
 
     if check_win(player):

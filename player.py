@@ -17,17 +17,13 @@ class Player():
 
     # TODO: Update your welcome_player() function to return a Player object
     #       Instead of returning just a name, create and return the Player
-    # Move your welcome message into a function called welcome_player().
     def get_name(self):
-        # TODO uncomment for production
-        # Ask for the player's name
         self.name = input("What is your name, adventurer? ")
 
     # TODO: Update add_to_inventory() so it:
     #       - Accepts a Player object as a parameter
     #       - Appends the item to player.inventory
     #       - Prints a message confirming the item was picked up
-    #Create an inventory system that the player can view
     def add_to_inventory(self, item):
         self.inventory.append(item)
         print(f"{item} has been added to your inventory. \n")
