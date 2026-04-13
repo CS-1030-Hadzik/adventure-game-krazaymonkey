@@ -1,15 +1,11 @@
 """
 Adventure Game
 Author: Tiffany Walther
-Version: 4.5
+Version: 5.0
 Description:
 This is a text-based adventure game where the player makes choices
 to navigate through a mysterious forest.
 """
-
-# TODO: Update the main while loop
-#       - Replace large decision blocks with function calls
-
 
 # TODO: Create a class called Player to represent the player in the game
 from player import Player
@@ -19,7 +15,6 @@ def welcome_player():
     print("Welcome to the Adventure Game!")
     print("Your journey begins here...")
 
-#Move the forest description into a function called describe_area().
 def describe_start_area():
     # Describe the starting area
     area1 = """
@@ -147,7 +142,6 @@ while True:
         print("The path looms ahead with an overwhelming presence.")
         stay_still(player)
 
-    # added in for fun
     elif decision == "q": #quit
         print("You turn and run from the forest ending your adventure.\n Thanks for playing!")
         break
