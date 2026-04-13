@@ -9,6 +9,7 @@ to navigate through a mysterious forest.
 
 # TODO: Create a class called Player to represent the player in the game
 from player import Player
+from enemies import Enemy
 
 def welcome_player():
 # Welcome message and introduction
@@ -30,15 +31,55 @@ def describe_start_area():
     """
     print(area1)
 
+
 # TODO: Create a function called explore_dark_woods(player)
 #       - Print area description
 #       - Add "lantern" to inventory if not already collected
-def explore_dark_woods(player):
+def explore_dark_woods(player, forest_creature):
         print(f"{player.name}, you step onto the left path and venture into the dark woods. ")
         print("The woods seem to whisper as you pass.")
-        print("You see something glimmering near the base of a tree.")
-        player.add_to_inventory("A lantern")
-        print("You return to the main path to choose again.")
+        print("You see something glimmering in a branch of a small tree.")
+        turn = 0
+
+        forest_creature.forest_fight()
+        #fight or run?
+        while choice == "fight" or choice == "f":
+            if turn == 0:
+                choice = input(f"{player.name} fight or run? ").lower()
+                if choice == "run" or choice == "r":
+                    break
+                print("Prepare to fight.\n")
+            else:
+                 #creature turn
+                print("The creature attacks!")
+            #fight:
+            print(f"{player.name} you raise your sword and attack!")
+
+            player_damage = player.sword_attack()
+            if forest_creature.defense > player_damage:
+                player.health -= forest_creature.strength
+                print("You were hit by the creature.")
+                print(f"Your health is now {player.health}\n")
+            elif forest_creature.defense < player_damage:
+                forest_creature.health -= player_damage
+                print("The creature shrieks as it's hit.")
+            else:
+                print("The creature blocked your attack.")
+                
+            if player.health < 1:
+                death_by_creature()
+                break
+            #game break//perma death -> new game
+            elif forest_creature.health < 1:
+                print("The creature collapses from it's wounds.")
+                player.add_to_inventory("A lantern")
+                #health potion
+                print("You return to the main path to choose again.")
+                break
+
+            turn += 1
+            if turn > 1:
+                turn = 0
 
 # TODO: Create a function called explore_cave(player)
 #       - If player.has_lantern: allow entry and add "treasure"
@@ -47,7 +88,10 @@ def explore_cave(player):
     if player.is_item_in_inventory("A lantern"):
         print(f"{player.name}, you enter the dark cave.")
         print("Lantern light bounces off the wet walls around you.")
-        print("You see a gold reflection around the next corner.")
+        print("You see a glimmer of gold as you round a corner.")
+
+        #cave_creature(Enemy)
+
         player.add_to_inventory("A treasure chest")
         print("You return to the main path to choose again.")
     else:
@@ -64,6 +108,9 @@ def explore_mountain_pass(player):
     print(f"{player.name}, you step onto the right path and venture into the mountains. ")
     print("The wind howls as you climb the steep, rocky slope.")
     print("You see something flapping in the wind, caught on a small tree.")
+    
+    #mountain_creature(Enemy)
+    
     player.add_to_inventory("A map")
     print("You return to the main path to choose again.")
 
@@ -108,6 +155,12 @@ def check_lose(player):
         return True
     else:
         return False
+    
+def death_by_creature(player):
+    if player.health <= 0:
+        print(f"{player.name} your wounds are too great.")
+        print("You have died")
+        exit()
 
 welcome_player()
 
@@ -117,6 +170,10 @@ player.get_name()
 
 # Concantate strings to create a personalized message
 print(f"Welcome {player.name}! Your journey begins now.")
+
+forest_creature = Enemy()
+cave_creature = Enemy()
+mountain_creature = Enemy()
 
 describe_start_area()
 

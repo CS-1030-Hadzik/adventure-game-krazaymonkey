@@ -1,0 +1,38 @@
+#TODO: Create a class for enemies to fight
+# one enemy for 3 main locations. can run away or fight
+    #stick creature for forest
+    #goblin for cave
+    #rock golem for mountain
+
+#init health, strenght, defense
+#drops health potion, area item
+
+class Enemy():
+    def __init__(self):
+        self.name = ""
+        self.health = 50
+        self.strength = 15
+        #defense is player.strenght vs enemy.defense, higher number wins
+        self.defense = 10
+        #health potion
+
+    def forest_fight():
+        print("\nThe branches of the small tree sway in the breeze as you approach.")
+        print("As you get closer, you see two orange eyes between the leaves.")
+        print("The small tree shakes and stands, dirt raining from the lower branchs.\n")
+
+
+#def cave_creature():
+    #print("\nYou see a small chest, gold spilling out in a small pile.")
+    #ptint("A skittering sound bounces off the walls around you.")
+    #print("A small, fleshy creature jumps in your path and shrieks, raising a stone club.\n")
+    #print("Prepare to fight.\n")
+
+
+#def mountain_creature()
+    #print("\nA small pile of rocks near the tree shifts as you approach.")
+    #print("The ground rumbles as the pile of rocks moves again, getting taller.")
+    #print("The rock creature turns to you, obsidian eyes angry, and roars.")
+    #print("Prepare to fight.\n")
+
+

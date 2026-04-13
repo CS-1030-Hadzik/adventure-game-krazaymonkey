@@ -7,13 +7,14 @@
 #         - self.health (set to 100)
 #         - self.has_map (set to False)
 #         - self.has_lantern (set to False)
+import random
+
 class Player():
     def __init__(self):
         self.name = ""
-        self.inventory = []
+        self.inventory = ["A sword"]
         self.health = 100
-        # self.has_map = False // no longer needed due to item_in_inventory
-        # self.has_lantern = False
+        self.sword = 0
 
     # TODO: Update your welcome_player() function to return a Player object
     #       Instead of returning just a name, create and return the Player
@@ -35,3 +36,6 @@ class Player():
             return True
         return False
 
+    def sword_attack(self):
+        self.sword = random.randint(1, 15)
+        return self.sword
