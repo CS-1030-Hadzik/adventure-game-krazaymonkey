@@ -32,7 +32,7 @@ class Enemy():
     def mountain_fight(self):
         print("\nA small pile of rocks near the tree shifts as you approach.")
         print("The ground rumbles as the pile of rocks moves again, getting taller.")
-        print("The rock creature turns to you, obsidian eyes angry, and roars.")
+        print("The rock creature turns to you, obsidian eyes angry, and roars.\n")
 
     def creature_attack(self):
         self.slap = random.randint(10, 14)

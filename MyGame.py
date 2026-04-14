@@ -113,11 +113,7 @@ def fight_sequence(player, creature):
             if choice == "run" or choice == "r":
                 break
             elif choice == "heal" or choice == "h":
-                player.health += inventory.use_health_potion()
-                if player.health > 100:
-                    player.health = 100
-                print("You quickly drink a healing potion.")
-                print(f"Your health is now {player.health}\n")
+                inventory.use_health_potion(player)
 
             elif choice == "fight" or choice == "f":
                 #player's turn
@@ -232,9 +228,7 @@ while True:
         stay_still(player)
 
     elif decision == "h": #heal
-        print("You drink a healing potion.")
-        inventory.use_health_potion()
-        print(f"Your health is now {player.health}\n")
+        inventory.use_health_potion(player)
 
     #look at inventory
     elif decision == "i":

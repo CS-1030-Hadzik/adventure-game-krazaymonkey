@@ -5,6 +5,7 @@
 #       - add lantern, map, treasure, herbs
 #       - check for required items for locations
 import random
+from player import Player
 
 class Inventory():
     def __init__(self):
@@ -42,13 +43,19 @@ class Inventory():
             print("Your pockets are full.")
         return self.potion_inventory
     
-    def use_health_potion(self):
+    def use_health_potion(self, player):
         if self.potion_inventory > 0:
+            print("You quickly drink a healing potion.")
             healing_points = random.randint(60, 75)
+            player.health += healing_points
+            if player.health > 100:
+                player.health = 100
+            print(f"Your health is now {player.health}\n")
             self.potion_inventory -= 1
             if self.potion_inventory <= 0:
                 self.potion_inventory = 0
-            return healing_points
+            return player.health
+        
         else:
             print("You don't have any potions.")
             return 0
