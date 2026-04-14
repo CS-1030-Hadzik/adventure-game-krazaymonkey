@@ -27,6 +27,7 @@ def describe_start_area():
         3. Take the right path toward the mountain pass.
         4. Search for the hidden valley.
         5. Stay where you are.
+        h. Drink a healing potion.
         q. Turn and run (quit).
         Type 'i' to view your inventory.
     """
@@ -40,78 +41,30 @@ def explore_dark_woods(player, forest_creature):
         print(f"{player.name}, you step onto the left path and venture into the dark woods. ")
         print("The woods seem to whisper as you pass.")
         print("You see something glimmering in a branch of a small tree.")
-        turn = 0
-        choice = ""
+        
 
         forest_creature.forest_fight()
-        #fight or run?
-        while choice == "":
-            if turn == 0:
-                choice = input(f"{player.name} fight, heal, or run? ").lower()
-                if choice == "run" or choice == "r":
-                    break
-                elif choice == "heal" or choice == "h":
-                    player.health += inventory.use_health_potion()
-                    if player.health > 100:
-                        player.health = 100
-                    print("You quickly drink a healing potion.")
-                    print(f"Your health is now {player.health}\n")
+        fight_sequence(player, forest_creature)
+                
+        inventory.add_to_inventory("A lantern")
+        print("You return to the main path to choose again.")
 
-                elif choice == "fight" or choice == "f":
-                    #player's turn
-                    print("Prepare to fight.\n")
-                    player_damage = player.sword_attack()
-                    if forest_creature.defense > player_damage:
-                        player.health -= forest_creature.strength
-                        print("You were hit by the creature.")
-                        print(f"Your health is now {player.health}\n")
-                    elif forest_creature.defense < player_damage:
-                        forest_creature.health -= player_damage
-                        print(f"{player.name} you raise your sword and attack!")
-                        print("The creature shrieks as it's hit.")
-                    else:
-                        print("The creature blocked your attack.")
-
-            else:
-                #creature turn
-                print("The creature attacks!")
-                creature_damage = forest_creature.creature_attack()
-                if player.defense >= creature_damage:
-                    print("You blocked the creature's attack.")
-                elif player.defense < creature_damage:
-                    player.health -= creature_damage
-                    print("You were hit by the creature.")
-                    print(f"Your health is now {player.health}\n")
-
-            if player.health < 1:
-                death_by_creature(player)
-                break
-            #game break//perma death -> new game
-            elif forest_creature.health < 1:
-                print("The creature collapses from it's wounds dropping a health potion.")
-                inventory.add_to_inventory("A lantern")
-                inventory.add_health_potion()
-                print("You return to the main path to choose again.")
-                break
-            
-            choice = ""
-            turn += 1
-            if turn > 1:
-                turn = 0
 
 # TODO: Create a function called explore_cave(player)
 #       - If player.has_lantern: allow entry and add "treasure"
 #       - Else: warn that it's too dark
-def explore_cave(player):
+def explore_cave(player, cave_creature):
     if inventory.is_item_in_inventory("A lantern"):
         print(f"{player.name}, you enter the dark cave.")
         print("Lantern light bounces off the wet walls around you.")
         print("You see a glimmer of gold as you round a corner.")
 
-        #cave_creature(Enemy)
+        cave_creature.cave_fight()
+        fight_sequence(player, cave_creature)
 
         inventory.add_to_inventory("A treasure chest")
         print("You return to the main path to choose again.")
+            
     else:
         print("It's too dark to see in the cave.\n")
         print("The looming darkness pushes you back to the main path.")
@@ -122,12 +75,13 @@ def explore_cave(player):
 # TODO: Create a function called explore_mountain_pass(player)
 #       - Print area description
 #       - Add "map" to inventory if not already collected
-def explore_mountain_pass(player):
+def explore_mountain_pass(player, mountain_creature):
     print(f"{player.name}, you step onto the right path and venture into the mountains. ")
     print("The wind howls as you climb the steep, rocky slope.")
     print("You see something flapping in the wind, caught on a small tree.")
     
-    #mountain_creature(Enemy)
+    mountain_creature.mountain_fight()
+    fight_sequence(player, mountain_creature)
     
     inventory.add_to_inventory("A map")
     print("You return to the main path to choose again.")
@@ -146,6 +100,65 @@ def explore_hidden_valley(player):
         print("Hungry and lost you return to the main path.")
         player.health -= 10
         print(f"Your health is now {player.health}\n")
+
+
+def fight_sequence(player, creature):
+    turn = 0
+    choice = ""
+
+    #fight or run?
+    while choice == "":
+        if turn == 0:
+            choice = input(f"{player.name} fight, heal, or run? ").lower()
+            if choice == "run" or choice == "r":
+                break
+            elif choice == "heal" or choice == "h":
+                player.health += inventory.use_health_potion()
+                if player.health > 100:
+                    player.health = 100
+                print("You quickly drink a healing potion.")
+                print(f"Your health is now {player.health}\n")
+
+            elif choice == "fight" or choice == "f":
+                #player's turn
+                print("Prepare to fight.\n")
+                player_damage = player.sword_attack()
+                if creature.defense > player_damage:
+                    player.health -= creature.strength
+                    print("You were hit by the creature.")
+                    print(f"Your health is now {player.health}\n")
+                elif creature.defense < player_damage:
+                    creature.health -= player_damage
+                    print(f"{player.name} you raise your sword and attack!")
+                    print("The creature shrieks as it is hit.")
+                else:
+                    print("The creature blocked your attack.")
+
+            if player.health < 1:
+                death_by_creature(player)
+                break
+            #game break//perma death -> new game
+            elif creature.health < 1:
+                print("The creature collapses from it's wounds dropping a health potion.")
+                inventory.add_health_potion()
+                break
+
+        else:
+            #creature turn
+            print("The creature attacks!")
+            creature_damage = creature.creature_attack()
+            if player.defense >= creature_damage:
+                print("You blocked the creature's attack.\n")
+            elif player.defense < creature_damage:
+                player.health -= creature_damage
+                print("You were hit by the creature.")
+                print(f"Your health is now {player.health}\n")
+
+        choice = ""
+        turn += 1
+        if turn > 1:
+            turn = 0
+
 
 # TODO: Create a function stay_still(player)
 #       - Subtract 10 health when the player stays still
@@ -194,11 +207,11 @@ forest_creature = Enemy()
 cave_creature = Enemy()
 mountain_creature = Enemy()
 
-describe_start_area()
-
 while True:
+    describe_start_area()
+
     # Ask the player for their first decision
-    decision = input("What will you do? (1, 2, 3, 4, 5, q, i): ").lower()
+    decision = input("What will you do? (1, 2, 3, 4, 5, h, i, q): ").lower()
 
     # Respond based on the player's decision
     if decision == "1": #dark woods
@@ -214,17 +227,23 @@ while True:
         explore_hidden_valley(player)
 
     elif decision == "5": 
-        print(f"{player.name}, you hesitate and stay where you are. ")
+        print(f"{player.name}, you hesitate and stay where you are.")
         print("The path looms ahead with an overwhelming presence.")
         stay_still(player)
 
+    elif decision == "h": #heal
+        print("You drink a healing potion.")
+        inventory.use_health_potion()
+        print(f"Your health is now {player.health}\n")
+
+    #look at inventory
+    elif decision == "i":
+        inventory.display_inventory()
+        
     elif decision == "q": #quit
         print("You turn and run from the forest ending your adventure.\n Thanks for playing!")
         break
 
-    #look at inventory
-    elif decision == "i":
-        print(player.inventory)
     else: #wrong input
         print("Confused, you stand still, unsure of what to do.\n Please chose from the above options.")
 

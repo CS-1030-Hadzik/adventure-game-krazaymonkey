@@ -12,6 +12,12 @@ class Inventory():
         self.weapon = ["A sword"]
         self.potion_inventory = 3
 
+    def display_inventory(self):
+        print(f"Items: {self.required_items_inventory}")  
+        print(f"Potions: {self.potion_inventory}")
+        print(f"Weapon: {self.weapon}")
+
+
     def add_to_inventory(self, item):
         self.required_items_inventory.append(item)
         print(f"{item} has been added to your inventory. \n")

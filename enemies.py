@@ -23,18 +23,16 @@ class Enemy():
         print("The small tree shakes and stands, dirt raining from the lower branchs.\n")
 
 
-#def cave_creature(self):
-    #print("\nYou see a small chest, gold spilling out in a small pile.")
-    #ptint("A skittering sound bounces off the walls around you.")
-    #print("A small, fleshy creature jumps in your path and shrieks, raising a stone club.\n")
-    #print("Prepare to fight.\n")
+    def cave_fight(self):
+        print("\nYou see a small chest, gold spilling out in a small pile.")
+        print("A skittering sound bounces off the walls around you.")
+        print("A small, fleshy creature jumps in your path and shrieks, raising a stone club.\n")
 
 
-#def mountain_creature(self)
-    #print("\nA small pile of rocks near the tree shifts as you approach.")
-    #print("The ground rumbles as the pile of rocks moves again, getting taller.")
-    #print("The rock creature turns to you, obsidian eyes angry, and roars.")
-    #print("Prepare to fight.\n")
+    def mountain_fight(self):
+        print("\nA small pile of rocks near the tree shifts as you approach.")
+        print("The ground rumbles as the pile of rocks moves again, getting taller.")
+        print("The rock creature turns to you, obsidian eyes angry, and roars.")
 
     def creature_attack(self):
         self.slap = random.randint(10, 14)
