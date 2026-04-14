@@ -10,6 +10,7 @@ to navigate through a mysterious forest.
 # TODO: Create a class called Player to represent the player in the game
 from player import Player
 from enemies import Enemy
+from inventory import Inventory
 
 def welcome_player():
 # Welcome message and introduction
@@ -40,43 +41,60 @@ def explore_dark_woods(player, forest_creature):
         print("The woods seem to whisper as you pass.")
         print("You see something glimmering in a branch of a small tree.")
         turn = 0
+        choice = ""
 
         forest_creature.forest_fight()
         #fight or run?
-        while choice == "fight" or choice == "f":
+        while choice == "":
             if turn == 0:
-                choice = input(f"{player.name} fight or run? ").lower()
+                choice = input(f"{player.name} fight, heal, or run? ").lower()
                 if choice == "run" or choice == "r":
                     break
-                print("Prepare to fight.\n")
-            else:
-                 #creature turn
-                print("The creature attacks!")
-            #fight:
-            print(f"{player.name} you raise your sword and attack!")
+                elif choice == "heal" or choice == "h":
+                    player.health += inventory.use_health_potion()
+                    if player.health > 100:
+                        player.health = 100
+                    print("You quickly drink a healing potion.")
+                    print(f"Your health is now {player.health}\n")
 
-            player_damage = player.sword_attack()
-            if forest_creature.defense > player_damage:
-                player.health -= forest_creature.strength
-                print("You were hit by the creature.")
-                print(f"Your health is now {player.health}\n")
-            elif forest_creature.defense < player_damage:
-                forest_creature.health -= player_damage
-                print("The creature shrieks as it's hit.")
+                elif choice == "fight" or choice == "f":
+                    #player's turn
+                    print("Prepare to fight.\n")
+                    player_damage = player.sword_attack()
+                    if forest_creature.defense > player_damage:
+                        player.health -= forest_creature.strength
+                        print("You were hit by the creature.")
+                        print(f"Your health is now {player.health}\n")
+                    elif forest_creature.defense < player_damage:
+                        forest_creature.health -= player_damage
+                        print(f"{player.name} you raise your sword and attack!")
+                        print("The creature shrieks as it's hit.")
+                    else:
+                        print("The creature blocked your attack.")
+
             else:
-                print("The creature blocked your attack.")
-                
+                #creature turn
+                print("The creature attacks!")
+                creature_damage = forest_creature.creature_attack()
+                if player.defense >= creature_damage:
+                    print("You blocked the creature's attack.")
+                elif player.defense < creature_damage:
+                    player.health -= creature_damage
+                    print("You were hit by the creature.")
+                    print(f"Your health is now {player.health}\n")
+
             if player.health < 1:
-                death_by_creature()
+                death_by_creature(player)
                 break
             #game break//perma death -> new game
             elif forest_creature.health < 1:
-                print("The creature collapses from it's wounds.")
-                player.add_to_inventory("A lantern")
-                #health potion
+                print("The creature collapses from it's wounds dropping a health potion.")
+                inventory.add_to_inventory("A lantern")
+                inventory.add_health_potion()
                 print("You return to the main path to choose again.")
                 break
-
+            
+            choice = ""
             turn += 1
             if turn > 1:
                 turn = 0
@@ -85,14 +103,14 @@ def explore_dark_woods(player, forest_creature):
 #       - If player.has_lantern: allow entry and add "treasure"
 #       - Else: warn that it's too dark
 def explore_cave(player):
-    if player.is_item_in_inventory("A lantern"):
+    if inventory.is_item_in_inventory("A lantern"):
         print(f"{player.name}, you enter the dark cave.")
         print("Lantern light bounces off the wet walls around you.")
         print("You see a glimmer of gold as you round a corner.")
 
         #cave_creature(Enemy)
 
-        player.add_to_inventory("A treasure chest")
+        inventory.add_to_inventory("A treasure chest")
         print("You return to the main path to choose again.")
     else:
         print("It's too dark to see in the cave.\n")
@@ -111,18 +129,18 @@ def explore_mountain_pass(player):
     
     #mountain_creature(Enemy)
     
-    player.add_to_inventory("A map")
+    inventory.add_to_inventory("A map")
     print("You return to the main path to choose again.")
 
 # TODO: Create a function called explore_hidden_valley(player)
 #       - If player.has_map: allow entry and add "rare herbs"
 #       - Else: warn that player can't find the valley
 def explore_hidden_valley(player):
-    if (player.is_item_in_inventory("A map") and player.is_item_in_inventory("A treasure chest")):
+    if (inventory.is_item_in_inventory("A map") and inventory.is_item_in_inventory("A treasure chest")):
         print(f"{player.name} you find your way to the hidden valley.")
         print("Rolling hills covered in wildflowers sway in a gentle breeze.")
         print("A distinct patch of green catches your eye.")
-        player.add_to_inventory("Rare herbs")
+        inventory.add_to_inventory("Rare herbs")
     else:
         print("You're missing the required items to find the hidden valley.")
         print("Hungry and lost you return to the main path.")
@@ -139,7 +157,7 @@ def stay_still(player):
 # TODO: Create win conditions
 # requires rare herbs and treasure. Tresure is required to get rare herbs
 def check_win(player):
-    if player.is_item_in_inventory("Rare herbs"):
+    if inventory.is_item_in_inventory("Rare herbs"):
         print(f"Congratulations, {player.name}, you have won the game!")
         print("The light is now shining brightly through the trees, ligting the path home.")
         return True
@@ -171,6 +189,7 @@ player.get_name()
 # Concantate strings to create a personalized message
 print(f"Welcome {player.name}! Your journey begins now.")
 
+inventory = Inventory()
 forest_creature = Enemy()
 cave_creature = Enemy()
 mountain_creature = Enemy()
@@ -183,13 +202,13 @@ while True:
 
     # Respond based on the player's decision
     if decision == "1": #dark woods
-        explore_dark_woods(player)
+        explore_dark_woods(player, forest_creature)
 
     elif decision == "2": #dark cave
-        explore_cave(player)
+        explore_cave(player, cave_creature)
 
     elif decision == "3": #mountain path
-        explore_mountain_pass(player)
+        explore_mountain_pass(player, mountain_creature)
 
     elif decision == "4": # hidden valley
         explore_hidden_valley(player)

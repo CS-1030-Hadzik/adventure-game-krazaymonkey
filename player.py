@@ -12,8 +12,8 @@ import random
 class Player():
     def __init__(self):
         self.name = ""
-        self.inventory = ["A sword"]
         self.health = 100
+        self.defense = 10
         self.sword = 0
 
     # TODO: Update your welcome_player() function to return a Player object
@@ -25,17 +25,8 @@ class Player():
     #       - Accepts a Player object as a parameter
     #       - Appends the item to player.inventory
     #       - Prints a message confirming the item was picked up
-    def add_to_inventory(self, item):
-        self.inventory.append(item)
-        print(f"{item} has been added to your inventory. \n")
-
-    def is_item_in_inventory(self, item):
-        #item = lantern
-        #look at inventory and check for a lantern
-        if item in self.inventory:
-            return True
-        return False
 
     def sword_attack(self):
-        self.sword = random.randint(1, 15)
+        self.sword = random.randint(10, 18)
         return self.sword
+
